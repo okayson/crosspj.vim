@@ -1,0 +1,175 @@
+*crosspj.txt*	Automatic file transporter to remote host.
+
+Version: 1.0
+Author : okayson <okayson1124@gmail.com>
+License: MIT license  {{{
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+}}}
+
+CONTENTS					*crosspj-contents*
+
+Introduction		|crosspj-introduction|
+Requirements		|crosspj-introduction|
+Usage			|crosspj-usage|
+Interface		|crosspj-interface|
+  Commands		  |crosspj-commands|
+  Functions		  |crosspj-functions|
+  Variables		  |crosspj-variables|
+  Key mappings		  |crosspj-key-mappings|
+ChangeLog		|crosspj-changelog|
+
+==============================================================================
+INTRODUCTION					*crosspj-introduction*
+
+crosspj transfer a file to remote host automatically, when you save a file 
+under spcified directory. It is expected that directory structure is same 
+between local root and remote root.
+
+==============================================================================
+REQUIREMENTS					*crosspj-requirements*
+
+crosspj requires following plugin.
+- netrw.vim
+
+==============================================================================
+USAGE						*crosspj-usage*
+
+Setup plugin at first. After then, All you have to do is to save a vim-buffer.
+
+Setup example is as follows:
+>
+	let s:localRoot = expand('<sfile>:h')
+	
+	call crosspj#initialize("192.168.250.1", "remote/path/", s:localRoot)
+	call crosspj#addIgnoreFile(".gitignore")
+	call crosspj#addIgnoreDirectory(".git/")
+	call crosspj#setUserPass("mike", "fcwx19zz")
+	
+	execute "lcd " . s:localRoot
+	
+	unlet s:localRoot
+<
+
+==============================================================================
+INTERFACE					*crosspj-interface*
+
+------------------------------------------------------------------------------
+COMMANDS					*crosspj-commands*
+
+:CrosspjAddIgnoreFile {file}			*CrosspjAddIgnoreFile*
+	See |crosspj#addIgnoreFile|.
+
+:CrosspjAddIgnoreDirectory {directory}		*CrosspjAddIgnoreDirectory*
+	See |crosspj#addIgnoreDirectory|.
+
+:CrosspjUserPass {user} {password}		*CrosspjUserPass*
+	See |crosspj#setUserPass|.
+
+:CrosspjEnable					*CrosspjEnable*
+	See |crosspj#enable|.
+
+:CrosspjDisable					*CrosspjDisable*
+	See |crosspj#disable|.
+
+:CrosspjTransfer				*CrosspjTransfer*
+	See |crosspj#transfer|.
+
+:CrosspjDisplay					*CrosspjDisplay*
+	See |crosspj#display|.
+
+------------------------------------------------------------------------------
+FUNCTIONS					*crosspj-functions*
+
+						*crosspj#initialize*
+crosspj#initialize({remoteHost}, {remoteRoot}, {localRoot})
+	Initialize crosspj.
+	{remoteHost}: Specify a host name.
+	{remoteRoot}: Specify a root directory on remote host.
+	{remoteRoot} is relative path to user's home directory.
+	{localRoot}: Specify a root directory on local host.
+
+	It is expected that directory structure is same 
+	between {remoteRoot} and {localRoot}.
+						*crosspj#finalize*
+crosspj#finalize()
+    	Finalize crosspj.
+
+						*crosspj#addIgnoreFile*
+crosspj#addIgnoreFile({file})
+	Add a {file} you want to ignore.
+	Specify a relative path to {localRoot}.
+	{localRoot} is specified by |crosspj#initialize|.
+
+						*crosspj#addIgnoreDirectory*
+crosspj#addIgnoreDirectory({directory})
+	Add a {directory} you want to ignore.
+	All files under {directory} is ignored.
+	Specify a relative path to {localRoot}.
+	{localRoot} is specified by |crosspj#initialize|.
+
+						*crosspj#setUserPass*
+crosspj#setUserPass({user}, {password})
+	Set {user} and {password} to login remote host.
+	If you don't use this function, you can input user and password
+	by input-prompt at first connecting to remote host.
+
+						*crosspj#enable*
+crosspj#enable()
+	Enable crosspj. It's default status after calling |crosspj#initialize|.
+	(related: |crosspj#disable|)
+
+						*crosspj#disable*
+crosspj#disable()
+	Disable crosspj. It means crosspj doesn't transfer a file.
+	(related: |crosspj#enable|)
+
+						*crosspj#transfer*
+crosspj#transfer()
+	Transfer a file manually.
+
+						*crosspj#display*
+crosspj#display()
+	Display current information of crosspj.
+
+------------------------------------------------------------------------------
+VARIABLES					*crosspj-variables*
+
+no variables.
+
+------------------------------------------------------------------------------
+KEY MAPPINGS					*crosspj-key-mappings*
+
+<Plug>(crosspj_enable)				*<Plug>(crosspj_enable)*
+	Execute |CrosspjEnable|.
+
+<Plug>(crosspj_disable)				*<Plug>(crosspj_disable)*
+	Execute |CrosspjDisable|.
+
+<Plug>(crosspj_transfer)			*<Plug>(crosspj_transfer)*
+	Execute |CrosspjTransfer|.
+
+<Plug>(crosspj_display)				*<Plug>(crosspj_display)*
+	Execute |CrosspjDisplay|.
+
+==============================================================================
+CHANGELOG					*crosspj-changelog*
+1.0    2015-04-24   First release.
+
+
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
